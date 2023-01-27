@@ -1,0 +1,52 @@
+<div class="container">
+
+  <!--<p class="h2 text-center my-4">Anyadir nova partitura</p>-->
+  <h1 class="display-5 my-5 text-center">Anyadir nova partitura</h1>
+  <form [formGroup]="form" (submit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Nom</mat-label>
+      <input matInput formControlName="nombre" readonly />
+      <!--<mat-error>El camp Nom es obligatori</mat-error>-->
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Instrument</mat-label>
+      <mat-select [value]="selectedValue" name="food" disabled>
+        <mat-option *ngFor="let instrument of instruments" [value]="instrument.value">
+          {{instrument.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div>
+      <mat-form-field>
+        <div>
+          <mat-toolbar>
+            <input matInput [value]="fileAttr" readonly />
+            <button type="button" mat-raised-button (click)="fileInput.click()">
+              Buscar fitxer
+            </button>
+          </mat-toolbar>
+
+          <input type="file" hidden #fileInput (change)="uploadFileEvt($event)" />
+        </div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <div *ngIf="imagenBase64" class="w-50 rounded mx-auto">
+        <img [src]="imagenBase64" class="rounded img-fluid" />
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between mt-3">
+      <a mat-stroked-button routerLink="/partitures">
+        Cancelar
+      </a>
+      <button mat-flat-button color="primary" [disabled]="form.invalid">
+        Guardar
+      </button>
+    </div>
+
+  </form>
+</div>
