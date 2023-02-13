@@ -7,12 +7,12 @@
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-            <div class="row row-cols-md-2 row-cols-lg-3">
-                <div class="col-12 col-md-6 col-lg-4 list-group" *ngFor="let folder of contact">
+            <div class="row row-cols-lg-2">
+                <div class="col-12 list-group" *ngFor="let folder of contact; let i = index">
                     <!-- {{folder.Nombre}} 
                     [ngStyle]="{'margin-top': index == 1 ? '0px !important' : '20px !important'}"-->
                     <li class="list-group-item d-flex justify-content-between align-items-center mt-2 mt-md-2 mt-lg-2">
-                        {{folder.Nombre}}
+                        {{i+1}}. {{folder.Nombre}}
                         <button class="btn btn-success" *ngIf="folder.UrlContainer != null" (click)="DescargarBlob(folder.UrlContainer)" [href]="fileUrl"><span class="material-icons">file_download</span></button>
                         <button class="btn btn-secondary" *ngIf="folder.UrlContainer == null" [routerLink]="['/AddPartitures', {Nombre: folder.Nombre}]" ><span class="material-icons">upload_file</span></button>
                     </li>

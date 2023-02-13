@@ -38,7 +38,13 @@ export class StorageService {
   public getToken(): any{
     const user = window.sessionStorage.getItem(USER_KEY);
     if (user){
-      return JSON.parse(user)['firebaseToken'];
+      if(JSON.parse(user)['firebaseToken']){
+        return JSON.parse(user)['firebaseToken'];
+      }else{
+        if(JSON.parse(user)['access_token'])
+          return JSON.parse(user)['access_token'];
+      }
+
     }
 
     return {};

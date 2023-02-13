@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 const AUTH_API = 'https://localhost:7201/api/auth/';
 
-const httpOptions = {
+var httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }).set("APISIM","1234")
 };
 
@@ -30,9 +30,11 @@ export class AuthService {
 
   refreshToken(token: string) {
 
-    httpOptions.headers.set('refreshToken',token);
+    const httpOptions1 = {
+      headers: new HttpHeaders({'Content-Type': 'application/json','APISIM':'1234','refreshToken':token})
+    };
 
-    return this.http.get(AUTH_API + 'RecargaToken', httpOptions);
+    return this.http.get(AUTH_API + 'RecargaToken', httpOptions1);
   }
 
   verificarToken(token: string)

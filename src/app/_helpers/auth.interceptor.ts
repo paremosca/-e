@@ -46,9 +46,10 @@ export class HttpRequestInterceptor implements HttpInterceptor {
 
       if (this.storageService.isLoggedIn()) {
         return this.authService.refreshToken(this.storageService.getRefreshToken()).pipe(
-          switchMap(() => {
+          switchMap((val) => {
             this.isRefreshing = false;
-
+            console.log(val);
+            this.storageService.saveUser(val);
             return next.handle(request);
           }),
           catchError((error) => {

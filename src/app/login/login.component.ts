@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { StorageService } from '../_services/storage.service';
 
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   roles: string[] = [];
 
-  constructor(private authService: AuthService, private storageService:StorageService) { }
+  constructor(private authService: AuthService, private storageService:StorageService, private router:Router) { }
 
   //form: FormGroup;
 
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
       this.isLoggedIn = true;
       this.roles = this.storageService.getUser().roles;
       console.log(this.storageService.getRefreshToken());
+      this.reloadPage()
     }
   }
 
@@ -54,7 +56,8 @@ export class LoginComponent implements OnInit {
   }
 
   reloadPage(): void {
-    window.location.reload();
+    //window.location.reload();
+    this.router.navigate(['/partitures']);
   }
 
   prueba():void{
