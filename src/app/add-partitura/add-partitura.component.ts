@@ -2,6 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {  ActivatedRoute, Router } from '@angular/router';
 import { SvcPartituresService } from '../svc_Partitures/svc-partitures.service';
+import {Storage,ref, uploadBytes, listAll, getDownloadURL} from '@angular/fire/storage'
+import { FirebaseApp } from '@angular/fire/app';
+import { AuthService } from '../_services/auth.service';
 
 interface Instrument {
   value: number;
@@ -15,7 +18,7 @@ interface Instrument {
 })
 export class AddPartituraComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private route: ActivatedRoute, private servicioPartitures: SvcPartituresService) { }
+  constructor(private formBuilder: FormBuilder, private authservice: AuthService, private router: Router, private route: ActivatedRoute, private servicioPartitures: SvcPartituresService, private storage: Storage) { }
 
   form: FormGroup;
   imagenBase64: string;
@@ -57,6 +60,9 @@ export class AddPartituraComponent implements OnInit {
         },
       ],
     });
+
+    //this.authservice.login_Angular("izanllopis99@gmail.com","12345678").then(resp=>console.log(resp)).catch(error=> console.log(error))
+    this.getImages()
   }
 
   //@ViewChild('fileInput') fileInput: ElementRef;
@@ -67,21 +73,29 @@ export class AddPartituraComponent implements OnInit {
       Array.from(imgFile.target.files).forEach((file: any) => {
         this.fileAttr += file.name;
       });
-      // HTML5 FileReader API
-      let reader = new FileReader();
-      this.imagenBase64 = ''
-      reader.onload = (e: any) => {
-        let image = new Image();
-        image.src = e.target.result;
-        image.onload = (rs) => {
-          let imgBase64Path = e.target.result;
-          this.imagenBase64 = imgBase64Path
-        };
-      };
-      reader.readAsDataURL(imgFile.target.files[0]);
-      // Reset if duplicate image uploaded again
-      const file: File = imgFile.target.files[0];
-      this.form.get('imagen_upload').setValue(imgFile);
+
+      const file = imgFile.target.files[0];
+    console.log(file)
+
+    const imgRef = ref(this.storage, `images/${file.name}`)
+      uploadBytes(imgRef, file)
+      .then(response => console.log(response))
+      .catch(error=> console.log(error));
+      // // HTML5 FileReader API
+      // let reader = new FileReader();
+      // this.imagenBase64 = ''
+      // reader.onload = (e: any) => {
+      //   let image = new Image();
+      //   image.src = e.target.result;
+      //   image.onload = (rs) => {
+      //     let imgBase64Path = e.target.result;
+      //     this.imagenBase64 = imgBase64Path
+      //   };
+      // };
+      // reader.readAsDataURL(imgFile.target.files[0]);
+      // // Reset if duplicate image uploaded again
+      // const file: File = imgFile.target.files[0];
+      // this.form.get('imagen_upload').setValue(imgFile);
 
 
       //console.log(imgFile);
@@ -89,6 +103,25 @@ export class AddPartituraComponent implements OnInit {
     } else {
       this.fileAttr = 'Selecciona un fitxer';
     }
+  }
+
+  getImages(){
+    const imagesRef = ref(this.storage, '');
+    listAll(imagesRef)
+    .then(async response=>{
+      for(let item of response.items){
+        const url = await getDownloadURL(item);
+        console.log(url)
+      }
+    })
+    .catch(error=>{
+      console.log(error)
+    })
+  }
+
+  uploadImage($event:any){
+    const file = $event.target.files[0];
+    console.log(file)
   }
 
   onSubmit() {

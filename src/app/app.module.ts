@@ -16,6 +16,14 @@ import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 
 import { httpInterceptorProviders } from './_helpers/auth.interceptor';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideStorage,getStorage } from '@angular/fire/storage';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { RegisterComponent } from './register/register.component';
+import { ResetEmailComponent } from './reset-email/reset-email.component';
+
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -24,7 +32,9 @@ import { httpInterceptorProviders } from './_helpers/auth.interceptor';
     MenuComponent,
     PartituresComponent,
     AddPartituraComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent,
+    ResetEmailComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +43,11 @@ import { httpInterceptorProviders } from './_helpers/auth.interceptor';
     MaterialModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideStorage(() => getStorage()),
+    provideAuth(() => getAuth())
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

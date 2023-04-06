@@ -2,7 +2,7 @@
 
   <!--<p class="h2 text-center my-4">Anyadir nova partitura</p>-->
   <h1 class="display-5 my-5 text-center">Anyadir nova partitura</h1>
-  <form [formGroup]="form" (submit)="onSubmit()">
+  <form [formGroup]="form">
     <mat-form-field appearance="outline">
       <mat-label>Nom</mat-label>
       <input matInput formControlName="nombre" readonly />
@@ -43,7 +43,7 @@
       <a mat-stroked-button routerLink="/partitures">
         Cancelar
       </a>
-      <button mat-flat-button color="primary" [disabled]="form.invalid">
+      <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="uploadImage($event)">
         Guardar
       </button>
     </div>

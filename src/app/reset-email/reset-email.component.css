@@ -1,0 +1,46 @@
+.mat-form-field {
+  margin-bottom: 20px 0;
+  width: 100% !important;
+}
+
+.mat-toolbar-single-row {
+  height: auto !important;
+  background: transparent;
+}
+
+  .mat-toolbar-single-row button {
+    width: 200px;
+  }
+
+.mat-form-field {
+  width: 100%;
+}
+
+#uploadFile {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: 9;
+  opacity: 0;
+  height: 100%;
+  cursor: pointer;
+  position: absolute;
+}
+
+
+.container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+  max-width: 680px;
+}
+
+.callout{
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #e9ecef;
+  border-left-width: .25rem;
+  border-radius: .25rem;
+}
+
+.callout-info{
+  border-left-color: #5bc0de;
+}

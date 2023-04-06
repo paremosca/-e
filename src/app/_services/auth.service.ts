@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { Auth, createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut, onAuthStateChanged, Unsubscribe, user, signInAnonymously, sendPasswordResetEmail } from '@angular/fire/auth';
+import { UsuarioModel } from '../models/usuario.model';
+import { NavigationEnd, Router } from '@angular/router';
 
 const AUTH_API = 'https://localhost:7201/api/auth/';
 
@@ -12,9 +15,48 @@ var httpOptions = {
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  private loggedIn = new BehaviorSubject<boolean>(false);
 
-  createAuthorizationHeader(headers: Headers) {
+  get isLoggedIn() {
+    return this.loggedIn.asObservable();
+  }
+
+  set isLoggedIn(valor){
+    valor.subscribe(resp=>{
+      this.loggedIn.next(resp);
+    })
+  }
+
+  UserIsLogged: Promise<boolean> = this.IsLogged();
+
+  constructor(private http: HttpClient, private auth: Auth, private router:Router) {}
+
+  async IsLogged(): Promise<boolean>{
+
+    try {
+      await this.waitForAuthInit();
+
+      console.log(this.auth);
+
+      var prueba3 = this.auth.currentUser != null ? this.auth.currentUser.uid != null ? true : false : false
+
+      this.loggedIn.next(prueba3);
+
+      return this.auth.currentUser != null ? this.auth.currentUser.uid != null ? true : false : false;
+
+
+    } catch (err: any) {
+      console.log('Failed to get current user...', err);
+      return false;
+    }
+  }
+
+  public async waitForAuthInit() {
+    let unsubscribe: Unsubscribe;
+    await new Promise<void>((resolve) => {
+      unsubscribe = this.auth.onAuthStateChanged((_) => resolve());
+    });
+    (await unsubscribe!)();
   }
 
   login(Usuario: string, Contrasenya: string): Observable<any> {
@@ -44,10 +86,33 @@ export class AuthService {
       headers: new HttpHeaders({'Content-Type': 'application/json','APISIM':'1234','idtoken':token})
     };
 
-
-    //httpOptions.headers.set('idtoken',token);
-
     return this.http.get(AUTH_API+'verificaToken', httpOptions1);
+  }
+
+  login_Angular(Usuario:UsuarioModel){
+    return signInWithEmailAndPassword(this.auth, Usuario.email, Usuario.password)
+  }
+
+  register_Angular(Usuario:UsuarioModel){
+    return createUserWithEmailAndPassword(this.auth,Usuario.email,Usuario.password);
+  }
+
+  login_Anonimous_Angular(){
+    return signInAnonymously(this.auth);
+  }
+
+  resetPassword_Angular(Usuario:UsuarioModel){
+    return sendPasswordResetEmail(this.auth,Usuario.email);
+  }
+
+  logout_Angular(){
+    var prueba2 = signOut(this.auth);
+
+    prueba2.then(resp=>{
+      this.loggedIn.next(false);
+    })
+
+    return prueba2;
   }
 
   logout(): Observable<any> {

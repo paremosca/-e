@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FirebaseError } from '@angular/fire/app';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable, of as observableOf } from 'rxjs';
+import Swal from 'sweetalert2';
+import { UsuarioModel } from '../models/usuario.model';
 import { AuthService } from '../_services/auth.service';
-import { StorageService } from '../_services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -11,65 +14,80 @@ import { StorageService } from '../_services/storage.service';
 })
 export class LoginComponent implements OnInit {
 
-  form: any = {
-    username: null,
-    password: null
-  };
-  isLoggedIn = false;
-  isLoginFailed = false;
-  errorMessage = '';
-  roles: string[] = [];
+  Usuario: UsuarioModel;
 
-  constructor(private authService: AuthService, private storageService:StorageService, private router:Router) { }
-
-  //form: FormGroup;
-
-  ngOnInit(): void {
-    if (this.storageService.isLoggedIn()) {
-      this.isLoggedIn = true;
-      this.roles = this.storageService.getUser().roles;
-      console.log(this.storageService.getRefreshToken());
-      this.reloadPage()
-    }
+  constructor(private authService: AuthService, private router:Router) {
+    console.log(this.router.getCurrentNavigation().extras);
   }
 
-  onSubmit(): void {
+  ngOnInit(): void {
+    this.Usuario = new UsuarioModel();
+  }
 
-    const { username, password } = this.form;
+  onSubmit(form: NgForm): void {
 
-    this.authService.login(username, password).subscribe({
-      next: data => {
-        this.storageService.saveUser(data);
+    if (form.invalid) {
+      return;
+    }
 
-        this.isLoginFailed = false;
-        this.isLoggedIn = true;
-        this.roles = this.storageService.getUser().roles;
-        this.reloadPage();
-      },
-      error: err => {
-        this.errorMessage = "Error iniciando Sesión";
-        this.isLoginFailed = true;
-      }
+    Swal.fire({
+      allowOutsideClick:false,
+      icon:'info',
+      text: "Espera perfa..."
     });
+    Swal.showLoading();
 
-    console.log(this.storageService.getRefreshToken());
+    this.authService.login_Angular(this.Usuario)
+    .then(resp => {
+      Swal.close();
+      Swal.fire({
+        icon: 'success',
+        title: 'Perfecte',
+        html: 'Hola Usuari de la SIM',
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading()
+        }
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+          this.authService.isLoggedIn = observableOf(true)
+          this.reloadPage();
+        }
+      })
+
+    })
+    .catch(error => {
+      this.authService.isLoggedIn = observableOf(false)
+      let authError = error as FirebaseError;
+        let errorCode = authError.code;
+        let MensajeError = "Error no tratat"
+
+        Swal.close();
+
+        if (errorCode == "auth/user-not-found") {
+          MensajeError = "Este email no te un compter creat, <br>si en vols un parlali a Izan";
+        }else if(errorCode == "auth/wrong-password"){
+          MensajeError = "Contrasenya incorrecta";
+        }else{
+          MensajeError = "Error no tratat, parlali a Izan i dis-li: <br><b>" + errorCode+"</b>";
+        }
+
+        Swal.fire({
+          icon:'error',
+          titleText: "Error Iniciant Sessió",
+          html: MensajeError,
+          confirmButtonText: 'Okei :('
+        });
+    })
   }
 
   reloadPage(): void {
-    //window.location.reload();
     this.router.navigate(['/partitures']);
   }
 
-  prueba():void{
-    console.log("ha entrat");
-    this.authService.verificarToken(this.storageService.getToken()).subscribe({
-      next: data => {
-        console.log(data);
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
+  ResetPass():void{
+    this.router.navigate(['/reset-email']);
   }
 
 }
