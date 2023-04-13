@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { Auth, createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut, onAuthStateChanged, Unsubscribe, user, signInAnonymously, sendPasswordResetEmail } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut, Unsubscribe, signInAnonymously, sendPasswordResetEmail } from '@angular/fire/auth';
 import { UsuarioModel } from '../models/usuario.model';
-import { NavigationEnd, Router } from '@angular/router';
-
-const AUTH_API = 'https://localhost:7201/api/auth/';
-
-var httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' }).set("APISIM","1234")
-};
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -59,34 +53,8 @@ export class AuthService {
     (await unsubscribe!)();
   }
 
-  login(Usuario: string, Contrasenya: string): Observable<any> {
-    return this.http.post(
-      AUTH_API + 'IniciarSesion',
-      {
-        Usuario,
-        Contrasenya,
-      },
-      httpOptions
-    );
-  }
-
-  refreshToken(token: string) {
-
-    const httpOptions1 = {
-      headers: new HttpHeaders({'Content-Type': 'application/json','APISIM':'1234','refreshToken':token})
-    };
-
-    return this.http.get(AUTH_API + 'RecargaToken', httpOptions1);
-  }
-
-  verificarToken(token: string)
-  {
-
-    const httpOptions1 = {
-      headers: new HttpHeaders({'Content-Type': 'application/json','APISIM':'1234','idtoken':token})
-    };
-
-    return this.http.get(AUTH_API+'verificaToken', httpOptions1);
+  getUID():string{
+    return this.auth.currentUser.uid != null ? this.auth.currentUser.uid : '';
   }
 
   login_Angular(Usuario:UsuarioModel){
@@ -115,7 +83,4 @@ export class AuthService {
     return prueba2;
   }
 
-  logout(): Observable<any> {
-    return this.http.post(AUTH_API + 'signout', { }, httpOptions);
-  }
 }

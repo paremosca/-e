@@ -1,0 +1,43 @@
+<!-- <input type="text" matInput [(ngModel)]="term"> -->
+<div class="card">
+  <div class="card-header py-3">
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <div class="input-group">
+          <span class="input-group-text">Buscar</span>
+          <input type="text"  class="form-control" [(ngModel)]="term" />
+        </div>
+      </div>
+      <div class="col-12 col-lg-3">
+        <div class="input-group">
+          <label class="input-group-text">Instrument</label>
+          <select class="form-select" [(ngModel)]="TipoInstrumento" (change)="changeTipoInstrumento()">
+            <option *ngFor="let item of TipoInstrumentos" [ngValue]="item.Clave">{{ item.Instrumento }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-12 col-lg-3">
+        <div class="input-group">
+          <label class="input-group-text">Paper</label>
+          <select class="form-select" [(ngModel)]="TipoPaper" (change)="changeTipoPaper()">
+            <option *ngFor="let item of TipoPaperPartitura" [ngValue]="item.Clave">{{ item.Nombre }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row row-cols-lg-2">
+      <div class="col-12 list-group p-0" *ngFor="let folder of listPartitures | filter: term; let i = index">
+        <!-- {{folder.Nombre}}
+        [ngStyle]="{'margin-top': index == 1 ? '0px !important' : '20px !important'}"-->
+        <li class="list-group-item d-flex justify-content-between align-items-center mt-2 mt-md-2 mt-lg-2 mx-3">
+            {{i+1}}. {{folder.Nombre}}
+            <button class="btn btn-success" *ngIf="folder.RutaArchivo != null" (click)="VerPartitura(folder.RutaArchivo)" [href]="RutaArchivo"><span class="material-icons">file_download</span></button>
+            <button class="btn btn-secondary" *ngIf="folder.RutaArchivo == null" [routerLink]="['/AddPartitures', {Nombre: folder.Nombre, Clave: folder.Clave, Tipo:1}]" ><span class="material-icons">upload_file</span></button>
+        </li>
+    </div>
+
+    </div>
+  </div>
+</div>

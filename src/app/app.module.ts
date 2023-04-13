@@ -15,7 +15,6 @@ import { AddPartituraComponent } from './add-partitura/add-partitura.component'
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 
-import { httpInterceptorProviders } from './_helpers/auth.interceptor';
 import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideStorage,getStorage } from '@angular/fire/storage';
@@ -24,6 +23,11 @@ import { RegisterComponent } from './register/register.component';
 import { ResetEmailComponent } from './reset-email/reset-email.component';
 
 import { RouterModule } from '@angular/router';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { ListPartiturasComponent } from './list-partituras/list-partituras.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +38,8 @@ import { RouterModule } from '@angular/router';
     AddPartituraComponent,
     LoginComponent,
     RegisterComponent,
-    ResetEmailComponent
+    ResetEmailComponent,
+    ListPartiturasComponent
   ],
   imports: [
     BrowserModule,
@@ -45,11 +50,14 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    PdfViewerModule,
+    Ng2SearchPipeModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideStorage(() => getStorage()),
-    provideAuth(() => getAuth())
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore())
   ],
-  providers: [httpInterceptorProviders],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
