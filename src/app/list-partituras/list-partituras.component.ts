@@ -24,20 +24,20 @@ export class ListPartiturasComponent implements OnInit {
   constructor(private servicioPartituras: PartiturasService) {}
 
   ngOnInit(): void {
-    // this.servicioPartituras.getTipoInstrumentos_Angular().then(
-    //   (Response) => {
-    //     console.log(Response);
-    //     this.TipoInstrumentos = Response;
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
+    this.servicioPartituras.getTipoInstrumentos_Angular().then(
+      (Response) => {
+        console.log(Response);
+        this.TipoInstrumentos = Response;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
 
-    // this.servicioPartituras.getTipoPaperPartitura_Angular().subscribe({
-    //   next: (v) => (this.TipoPaperPartitura = v),
-    //   error: (e) => console.error(e),
-    // });
+    this.servicioPartituras.getTipoPaperPartitura_Angular().subscribe({
+      next: (v) => (this.TipoPaperPartitura = v),
+      error: (e) => console.error(e),
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -53,16 +53,16 @@ export class ListPartiturasComponent implements OnInit {
   }
 
   loadPartitures() {
-    // this.servicioPartituras.getPartituras_Angular(this.IdTipoPartitura, this.TipoInstrumento, this.TipoPaper)
-    //   .then(
-    //     (Response) => {
-    //       console.log(Response);
-    //       this.listPartitures = Response;
-    //     },
-    //     (err) => {
-    //       console.log(err);
-    //     }
-    //   );
+    this.servicioPartituras.getPartituras_Angular(this.IdTipoPartitura, this.TipoInstrumento, this.TipoPaper)
+      .then(
+        (Response) => {
+          console.log(Response);
+          this.listPartitures = Response;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 
   async VerPartitura(RutaArchivo: string) {
