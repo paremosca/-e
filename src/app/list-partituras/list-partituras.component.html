@@ -11,7 +11,7 @@
       <div class="col-12 col-lg-3 mt-lg-0 mt-3">
         <mat-form-field>
           <mat-label>Instrument</mat-label>
-          <mat-select name="ClaveInstrumento" [(ngModel)]="TipoInstrumento" (selectionChange)="changeTipoInstrumento()">
+          <mat-select name="ClaveInstrumento" [(ngModel)]="TipoInstrumento" (selectionChange)="changeTipoInstrumento()" [disabled]="!EsArxiver && !EsAdmin">
             <mat-option *ngFor="let instrument of TipoInstrumentos" [value]="instrument.Clave">
               {{instrument.Instrumento}}
             </mat-option>
@@ -44,7 +44,7 @@
             <div class="d-flex justify-content-between ml-2">
               <button class="btn btn-success" *ngIf="folder.RutaArchivo != null" (click)="VerPartitura(folder.RutaArchivo)" [href]="RutaArchivo"><span class="material-icons">file_download</span></button>
               <button class="btn btn-danger" style="margin-left: 20px !important;" *ngIf="folder.RutaArchivo != null && EsAdmin" (click)="EliminarPartitura(folder.Clave)" ><span class="material-icons">delete</span></button>
-              <button class="btn btn-secondary" *ngIf="folder.RutaArchivo == null && EsArxiver" [routerLink]="['/AddPartitures', {Nombre: folder.Nombre, Clave: folder.Clave, Tipo:IdTipoPartitura, ClaveInstrument:TipoInstrumento, ClavePaper:TipoPaper}]" ><span class="material-icons">upload_file</span></button>
+              <button class="btn btn-secondary" *ngIf="(folder.RutaArchivo == null && EsArxiver) || (folder.RutaArchivo == null && EsAdmin) " [routerLink]="['/AddPartitures', {Nombre: folder.Nombre, Clave: folder.Clave, Tipo:IdTipoPartitura, ClaveInstrument:TipoInstrumento, ClavePaper:TipoPaper}]" ><span class="material-icons">upload_file</span></button>
             </div>
         </li>
       </div>
