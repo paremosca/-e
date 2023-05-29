@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsuarioModel } from '../models/usuario.model';
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   selector: 'app-reset-email',
@@ -10,7 +11,7 @@ import { UsuarioModel } from '../models/usuario.model';
 })
 export class ResetEmailComponent implements OnInit {
   Usuario: UsuarioModel;
-  constructor(private router:Router) { }
+  constructor(private router:Router,private auth:AuthService) { }
 
   ngOnInit(): void {
     this.Usuario = new UsuarioModel();
@@ -22,6 +23,16 @@ export class ResetEmailComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
+
+    if (form.invalid) {
+      return;
+    }
+
+    this.auth.resetPassword_Angular(this.Usuario).then(Resp=>{
+      console.log(Resp);
+    }).catch(err=>{
+      console.log(err)
+    })
 
   }
 

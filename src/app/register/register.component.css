@@ -2,20 +2,20 @@
     margin-bottom: 20px 0;
     width: 100% !important;
   }
-  
+
   .mat-toolbar-single-row {
     height: auto !important;
     background: transparent;
   }
-  
+
     .mat-toolbar-single-row button {
       width: 200px;
     }
-  
+
   .mat-form-field {
     width: 100%;
   }
-  
+
   #uploadFile {
     top: 0px;
     left: 0px;
@@ -26,9 +26,12 @@
     cursor: pointer;
     position: absolute;
   }
-  
-  
+
+
   .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
     max-width: 680px;
   }
-  
+
+  .swal2-text {
+font-size: 10px;
+  }

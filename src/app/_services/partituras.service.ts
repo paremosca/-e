@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { addDoc, collection, collectionData, doc, Firestore, getDocs, orderBy, query, setDoc, where } from '@angular/fire/firestore';
 import { getDownloadURL, listAll, ref, Storage } from '@angular/fire/storage';
+import { deleteDoc } from '@firebase/firestore';
 import { Observable } from 'rxjs';
 import { DocPartitura } from '../models/DocPartitura.model';
 import { DocsPartitura } from '../models/DocsPartitura.model';
@@ -9,6 +10,7 @@ import { formPartituraModel } from '../models/formPartitura.model';
 import { PartituraModel } from '../models/partitura.model';
 import { TipoInstrumento } from '../models/tipoinstrumento.model';
 import { TipoPartitura } from '../models/TipoPartitura.model';
+import { UsuarioModel } from '../models/usuario.model';
 
 const AUTH_API = 'https://localhost:7201/api/partituras/';
 
@@ -154,7 +156,7 @@ export class PartiturasService {
     // })
 
     await getDownloadURL(ref(this.storage,ruta)).then((url)=>{
-      console.log(url)
+      //console.log(url)
       resp_url = url;
     })
 
@@ -183,5 +185,19 @@ export class PartiturasService {
     return docs as unknown as Observable<TipoPartitura[]>;
 
   }
+
+  async borrarPartitura(IdTipoPartitura:number, TipoInstrumento:number, TipoPaper:number, ClaveTipoPartitura:string, ClavePartitura:number): Promise<any>{
+    let resp_aux;
+
+    let id_aux: string = `${IdTipoPartitura}_${ClavePartitura}_${TipoInstrumento}_${TipoPaper}`;
+
+    console.log(id_aux)
+    console.log(`/TipoPartituras/${IdTipoPartitura}/${ClaveTipoPartitura}/${ClavePartitura}/Documentos`)
+    resp_aux = await deleteDoc(doc(this.firestore,`/TipoPartituras/${IdTipoPartitura}/${ClaveTipoPartitura}/${ClavePartitura}/Documentos`,id_aux)).then(res=>{
+      console.log(res);
+    })
+    return resp_aux
+  }
+
 
 }

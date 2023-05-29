@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Storage,ref, uploadBytes, listAll, getDownloadURL} from '@angular/fire/storage'
 import { AuthService } from '../_services/auth.service';
 import { formPartituraModel } from '../models/formPartitura.model';
@@ -10,6 +10,7 @@ import { PartituraModel } from '../models/partitura.model';
 import { Observable } from 'rxjs';
 import { PartiturasService } from '../_services/partituras.service';
 import { serverTimestamp } from '@firebase/firestore';
+import Swal from 'sweetalert2';
 
 interface Instrument {
   value: number;
@@ -23,7 +24,7 @@ interface Instrument {
 })
 export class AddPartituraComponent implements OnInit {
 
-  constructor(private ServicioPartituras:PartiturasService, private route: ActivatedRoute, private storage: Storage, private auth:AuthService) { }
+  constructor(private ServicioPartituras:PartiturasService, private route: ActivatedRoute, private router:Router, private storage: Storage, private auth:AuthService) { }
 
   formPartitura: formPartituraModel;
   docPartitura: DocPartitura;
@@ -45,6 +46,8 @@ export class AddPartituraComponent implements OnInit {
     this.formPartitura.NombrePartitura = this.route.snapshot.paramMap.get("Nombre")
     this.formPartitura.ClavePartitura = Number(this.route.snapshot.paramMap.get("Clave"))
     this.formPartitura.ClaveTipo = Number(this.route.snapshot.paramMap.get("Tipo"))
+    this.formPartitura.ClaveInstrumento = Number(this.route.snapshot.paramMap.get("ClaveInstrument"))
+    this.formPartitura.ClaveTipoPaper = Number(this.route.snapshot.paramMap.get("ClavePaper"))
 
     this.ServicioPartituras.getTipoInstrumentos_Angular().then(Response=>{
       console.log(Response);
@@ -59,8 +62,12 @@ export class AddPartituraComponent implements OnInit {
       error: (e) => console.error(e)
   })
 
-    this.formPartitura.ClaveInstrumento = 9
-    this.formPartitura.ClaveTipoPaper = 1
+    if(!this.formPartitura.ClaveInstrumento){
+      this.formPartitura.ClaveInstrumento = 9
+    }
+    if(!this.formPartitura.ClaveTipoPaper){
+      this.formPartitura.ClaveTipoPaper = 1
+    }
 
     this.getImages()
   }
@@ -98,13 +105,11 @@ export class AddPartituraComponent implements OnInit {
   }
 
   getImages(){
-    //for cada item de la consulta get docs: Tipopartitura, clavepartitura, claveinstr, clavetipopaper
     const imagesRef = ref(this.storage, 'images');
     listAll(imagesRef)
     .then(async response=>{
       for(let item of response.items){
         const url = await getDownloadURL(item);
-        console.log(url)
       }
     })
     .catch(error=>{
@@ -145,22 +150,21 @@ export class AddPartituraComponent implements OnInit {
 
     const imgRef = ref(this.storage, `Partitures/${this.formPartitura.ClaveTipo}/${this.formPartitura.ClavePartitura}/${this.formPartitura.ClaveInstrumento}/${this.formPartitura.ClaveTipoPaper}/${NombreArchivo}`)
       uploadBytes(imgRef, file)
-      .then(response =>
+      .then(response =>{
         console.log(response)
 
-        )
+        Swal.close();
+      Swal.fire(
+        'Perfecte!',
+        'Partitura guardada correctament',
+        'success'
+      ).then((result=>{
+        //this.router.navigate(['/partitures']);
+      }))})
       .catch(error=>
         console.log(error)
         );
 
-    // this.servicioPartitures.UploadBlob(this.form).subscribe(data => {
-    //   console.log(data);
-    //   console.log("tot bé");
-    //   this.router.navigate(['/partitures'])
-    // }, errors => {
-    //   console.log(errors)
-    //   console.log("tot mal");
-    // });
   }
 
 }

@@ -13,6 +13,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatNavList} from '@angular/material/list';
 import {MatListModule} from '@angular/material/list';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 const materialModules = [
   MatIconModule,
@@ -28,7 +29,8 @@ const materialModules = [
   MatButtonModule,
   MatIconModule,
   MatDividerModule,
-  MatListModule
+  MatListModule,
+  MatCheckboxModule
 ];
 
 

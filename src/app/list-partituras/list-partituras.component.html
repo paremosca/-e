@@ -1,43 +1,53 @@
-<!-- <input type="text" matInput [(ngModel)]="term"> -->
 <div class="card">
-  <div class="card-header py-3">
+  <div class="card-header bg-white py-3" style="padding-top: 2.25rem !important;">
     <div class="row">
       <div class="col-12 col-lg-6">
-        <div class="input-group">
-          <span class="input-group-text">Buscar</span>
-          <input type="text"  class="form-control" [(ngModel)]="term" />
-        </div>
+        <mat-form-field>
+          <mat-label>Buscar</mat-label>
+          <input matInput name="nombre" [(ngModel)]="term" autocomplete="off"/>
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
       </div>
       <div class="col-12 col-lg-3 mt-lg-0 mt-3">
-        <div class="input-group">
-          <label class="input-group-text">Instrument</label>
-          <select class="form-select" [(ngModel)]="TipoInstrumento" (change)="changeTipoInstrumento()">
-            <option *ngFor="let item of TipoInstrumentos" [ngValue]="item.Clave">{{ item.Instrumento }}</option>
-          </select>
-        </div>
+        <mat-form-field>
+          <mat-label>Instrument</mat-label>
+          <mat-select name="ClaveInstrumento" [(ngModel)]="TipoInstrumento" (selectionChange)="changeTipoInstrumento()">
+            <mat-option *ngFor="let instrument of TipoInstrumentos" [value]="instrument.Clave">
+              {{instrument.Instrumento}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="col-12 col-lg-3 mt-lg-0 mt-3">
-        <div class="input-group">
-          <label class="input-group-text">Paper</label>
-          <select class="form-select" [(ngModel)]="TipoPaper" (change)="changeTipoPaper()">
-            <option *ngFor="let item of TipoPaperPartitura" [ngValue]="item.Clave">{{ item.Nombre }}</option>
-          </select>
-        </div>
+        <mat-form-field>
+          <mat-label>Paper</mat-label>
+          <mat-select name="ClaveTipoPaper" [(ngModel)]="TipoPaper" (selectionChange)="changeTipoPaper()">
+            <mat-option *ngFor="let TipoPaper of TipoPaperPartitura" [value]="TipoPaper.Clave">
+              {{TipoPaper.Nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
   </div>
   <div class="card-body">
+    <div class="row">
+      <div class="col-auto ms-auto">
+        <button class="btn btn-primary d-flex" (click)="DescargatTodo()">Descarregar tot<mat-icon>download</mat-icon>
+        </button>
+      </div>
+    </div>
     <div class="row row-cols-lg-2">
-      <div class="col-12 list-group p-0" *ngFor="let folder of listPartitures | filter: term; let i = index">
-        <!-- {{folder.Nombre}}
-        [ngStyle]="{'margin-top': index == 1 ? '0px !important' : '20px !important'}"-->
+      <div class="col-12 list-group p-0" *ngFor="let folder of listPartitures$ | filter: term; let i = index">
         <li class="list-group-item d-flex justify-content-between align-items-center mt-2 mt-md-2 mt-lg-2 mx-3">
             {{i+1}}. {{folder.Nombre}}
-            <button class="btn btn-success" *ngIf="folder.RutaArchivo != null" (click)="VerPartitura(folder.RutaArchivo)" [href]="RutaArchivo"><span class="material-icons">file_download</span></button>
-            <button class="btn btn-secondary" *ngIf="folder.RutaArchivo == null" [routerLink]="['/AddPartitures', {Nombre: folder.Nombre, Clave: folder.Clave, Tipo:1}]" ><span class="material-icons">upload_file</span></button>
+            <div class="d-flex justify-content-between ml-2">
+              <button class="btn btn-success" *ngIf="folder.RutaArchivo != null" (click)="VerPartitura(folder.RutaArchivo)" [href]="RutaArchivo"><span class="material-icons">file_download</span></button>
+              <button class="btn btn-danger" style="margin-left: 20px !important;" *ngIf="folder.RutaArchivo != null && EsAdmin" (click)="EliminarPartitura(folder.Clave)" ><span class="material-icons">delete</span></button>
+              <button class="btn btn-secondary" *ngIf="folder.RutaArchivo == null && EsArxiver" [routerLink]="['/AddPartitures', {Nombre: folder.Nombre, Clave: folder.Clave, Tipo:IdTipoPartitura, ClaveInstrument:TipoInstrumento, ClavePaper:TipoPaper}]" ><span class="material-icons">upload_file</span></button>
+            </div>
         </li>
-    </div>
-
+      </div>
     </div>
   </div>
 </div>

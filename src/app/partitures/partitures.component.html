@@ -19,73 +19,12 @@
         </div>
         </div>
       </div>
-
-
-      <!-- <div class="link">
-        <div class="content" (click)="changeIdTipoPartitura(1)">
-          <div class="icon pe-2">
-            <img src="../../assets/images/sheet-music.png">
-          </div>
-          <div class="title">Pasodobles</div>
-      </div>
-    </div>
-    <div class="link">
-      <div class="content" (click)="changeIdTipoPartitura(3)">
-        <div class="icon pe-2">
-          <img src="../../assets/images/Moros.png" style="transform: rotate(337deg);">
-        </div>
-        <div class="title">Marxes Mores</div>
-    </div>
-  </div>
-  <div class="link">
-    <div class="content" (click)="changeIdTipoPartitura(2)">
-      <div class="icon pe-2">
-        <img src="../../assets/images/Cristians.png">
-      </div>
-      <div class="title">Marxes Cristianes</div>
-  </div>
-</div>
-<div class="link">
-  <div class="content" [routerLink]="['/home']" [routerLinkActive]="'active'">
-    <div class="icon pe-2">
-      <img src="../../assets/images/jukebox.png">
-    </div>
-    <div class="title">Xarangues Negres</div>
-</div>
-</div>
-<div class="link">
-  <div class="content" (click)="changeIdTipoPartitura(6)">
-    <div class="icon pe-2">
-      <img src="../../assets/images/speaker.png">
-    </div>
-    <div class="title">Xarangues Rojes</div>
-</div>
-</div>
-<div class="link">
-  <div class="content" [routerLink]="['/home']" [routerLinkActive]="'active'">
-    <div class="icon pe-2">
-      <img src="../../assets/images/jazz.png">
-    </div>
-    <div class="title">Xarangues Noves</div>
-</div>
-</div>
-<div class="link">
-  <div class="content" [routerLink]="['/home']" [routerLinkActive]="'active'">
-    <div class="icon pe-2">
-      <img src="../../assets/images/provesso.png">
-    </div>
-    <div class="title">Marxes Provesso</div>
-</div>
-</div> -->
-
-
-
     </div>
   </mat-drawer>
 
   <div class="example-sidenav-content">
 
-    <app-list-partituras [IdTipoPartitura]="IdTipoPartitura"></app-list-partituras>
+    <app-list-partituras [IdTipoPartitura]="IdTipoPartitura" [ClaveInstrument]="ClaveInstrument" [ClavePaper]="ClavePaper"></app-list-partituras>
 
   </div>
 
