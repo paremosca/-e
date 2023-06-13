@@ -84,9 +84,9 @@ export class ListPartiturasComponent implements OnInit {
       this.loadPartitures()
   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   this.loadPartitures();
-  // }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.loadPartitures();
+  }
 
   changeTipoInstrumento() {
     this.loadPartitures();

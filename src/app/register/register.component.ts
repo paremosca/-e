@@ -87,9 +87,10 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register_Angular(this.Usuario)
       .then(response => {
-
+        this.Usuario.uid = response.user.uid;
         this.authService.setUsuario_Angular(this.Usuario).then((resp)=>{
           console.log(resp);
+          console.log("esto es el return del set Usuario")
         })
 
 
@@ -99,7 +100,7 @@ export class RegisterComponent implements OnInit {
           icon: 'success',
           title: 'Ja t\'has registrat!!',
           html: 'T\'has registrat correctament, especial.',
-          timer: 4000,
+          timer: 40000,
           timerProgressBar: true,
           didOpen: () => {
             Swal.showLoading()

@@ -4,7 +4,8 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { Auth, createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut, Unsubscribe, signInAnonymously, sendPasswordResetEmail } from '@angular/fire/auth';
 import { UsuarioModel } from '../models/usuario.model';
 import { Router } from '@angular/router';
-import { addDoc, collection, doc, Firestore, getDoc, getDocs, query, setDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, doc, DocumentReference, Firestore, getDoc, getDocs, query, setDoc, where } from '@angular/fire/firestore';
+import { updateDoc } from '@firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -154,19 +155,25 @@ export class AuthService {
 
   async setUsuario_Angular(Usuario:UsuarioModel){
     const dbRef = collection(this.firestore, "usuarios");
-    await addDoc(dbRef,{
+    const docref1 = await addDoc(dbRef,{
       Nombre: Usuario.nom,
       Apellidos: Usuario.apellidos,
       Email: Usuario.email,
       ClaveInstrument: Usuario.ClaveInstrument,
       ClavePaper: Usuario.ClavePaper,
       EsAdmin:false,
-      EsArxiver:true
+      EsArxiver:true,
+      uid:Usuario.uid
     }).then(async resp=>{
+      // await updateDoc(doc(this.firestore,"usuarios",resp.id),{
+      //   uid:resp.id
+      // });
       return await resp;
     }).catch(err=>{
       console.log(err)
     })
+
+    return docref1;
 
 }
 
