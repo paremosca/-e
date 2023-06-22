@@ -113,6 +113,10 @@ export class ListPartiturasComponent implements OnInit {
       );
   }
 
+  // async AddProperty(){
+  //   this.servicioPartituras.setPropertyPartituras()
+  // }
+
   async DescargatTodo() {
 
     const jszip = new JSZip();

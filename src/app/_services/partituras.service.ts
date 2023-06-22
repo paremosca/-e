@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, doc, Firestore, getDocs, orderBy, query, setDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, doc, Firestore, getDocs, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { getDownloadURL, listAll, ref, Storage } from '@angular/fire/storage';
 import { deleteDoc } from '@firebase/firestore';
 import { Observable } from 'rxjs';
@@ -50,12 +50,12 @@ export class PartiturasService {
         //console.log(doc1);
 
         ClaveTipoPartitura = doc2.data().ClaveTipoPartitura;
-        console.log(doc2.data().ClaveTipoPartitura);
+        //console.log(doc2.data().ClaveTipoPartitura);
       });
 
     let docs = new Array<DocsPartitura>();
     const PartutyraRef = collection(this.firestore, `/TipoPartituras/${IdTipoPartitura}/${ClaveTipoPartitura}`);
-    const q = query(PartutyraRef, orderBy('Nombre'));
+    const q = query(PartutyraRef,where("esToca","==",true), orderBy('Nombre'));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(async (doc) => {
       let doc_aux = new PartituraModel()
@@ -199,5 +199,21 @@ export class PartiturasService {
     return resp_aux
   }
 
+
+  async setPropertyPartituras(){
+    const q = query(collection(this.firestore, "/TipoPartituras/7/Marxes Provesso"));
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc1) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc1.id, " => ", doc1.data());
+
+      const frankDocRef = doc(this.firestore, "/TipoPartituras/7/Marxes Provesso", doc1.id);
+      await updateDoc(frankDocRef, {
+        esToca:true
+    });
+
+    });
+  }
 
 }
