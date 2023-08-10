@@ -38,6 +38,19 @@
         </button>
       </div>
     </div>
+    <div *ngIf="isLoading">
+      <!-- Add your loading spinner component or HTML markup here -->
+      <div class="spinner__loading">
+        <span>mas sabe perro sanxe por perro que por sanche</span>
+        <div>
+          <mat-progress-spinner
+            diameter="60"
+            mode="indeterminate">
+            </mat-progress-spinner>
+        </div>
+      </div>
+    </div>
+
     <div class="row row-cols-lg-2">
       <div class="col-12 list-group p-0" *ngFor="let folder of listPartitures$ | filter: term; let i = index">
         <li class="list-group-item d-flex justify-content-between align-items-center mt-2 mt-md-2 mt-lg-2 mx-3">
@@ -46,6 +59,7 @@
               <button class="btn btn-success" *ngIf="folder.RutaArchivo != null" (click)="VerPartitura(folder.RutaArchivo)" [href]="RutaArchivo"><span class="material-icons">file_download</span></button>
               <button class="btn btn-danger" style="margin-left: 20px !important;" *ngIf="folder.RutaArchivo != null && EsAdmin" (click)="EliminarPartitura(folder.Clave)" ><span class="material-icons">delete</span></button>
               <button class="btn btn-secondary" *ngIf="(folder.RutaArchivo == null && EsArxiver) || (folder.RutaArchivo == null && EsAdmin) " [routerLink]="['/AddPartitures', {Nombre: folder.Nombre, Clave: folder.Clave, Tipo:IdTipoPartitura, ClaveInstrument:TipoInstrumento, ClavePaper:TipoPaper}]" ><span class="material-icons">upload_file</span></button>
+              <!-- <buton class="btn btn-warning" (click)="comprobarPartituras(folder.Clave)">prueba</buton> -->
             </div>
         </li>
       </div>

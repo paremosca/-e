@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { AuthService } from '../_services/auth.service';
 import { stringify } from 'querystring';
 import { resourceUsage } from 'process';
+import { doc } from '@firebase/firestore';
 
 @Component({
   selector: 'app-list-partituras',
@@ -35,6 +36,8 @@ export class ListPartiturasComponent implements OnInit {
   TipoPaper: number = 1;
   EsArxiver: boolean;
   EsAdmin: boolean;
+
+  isLoading: boolean = false;
 
   result_aux: Array<DocsPartitura> = [];
 
@@ -118,7 +121,8 @@ export class ListPartiturasComponent implements OnInit {
   // }
 
   async DescargatTodo() {
-
+    this.isLoading = true;
+    try {
     const jszip = new JSZip();
 
     let megaprueba = this.listPartitures$ as unknown as DocsPartitura[];
@@ -131,6 +135,32 @@ export class ListPartiturasComponent implements OnInit {
             const fileBlob = fetch(url_aux).then((response) => response.blob());
             jszip.file(doc1.Nombre + '.pdf', fileBlob);
           });
+      }else if(doc1?.ClaveInstrumento && doc1?.ClaveTipoPaper){
+
+        for (let i = doc1?.ClaveTipoPaper - 1; i >= 1; i--) {
+          var todook:boolean = false;
+          await this.servicioPartituras.getPartitura(this.TipoInstrumento,i,this.IdTipoPartitura,doc1.Clave).then(async (doc_aux1) => {
+            var partitura_aux = new DocPartitura;
+            partitura_aux = doc_aux1[0];
+
+            if (partitura_aux != undefined){
+              await this.servicioPartituras
+              .getUrlPartitura_Angular(partitura_aux.RutaArchivo)
+              .then((url_aux) => {
+                const fileBlob = fetch(url_aux).then((response) => response.blob());
+                jszip.file(doc1.Nombre + '.pdf', fileBlob);
+                todook = true;
+              });
+
+            }
+
+
+          });
+          if (todook){
+            break;
+          }
+
+        }
       }
     }
 
@@ -156,13 +186,37 @@ export class ListPartiturasComponent implements OnInit {
         selectedPaper.Nombre +
         '.zip'
     );
+    } catch (error) {
+      // Handle any errors
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   async VerPartitura(RutaArchivo: string) {
     var url = await this.servicioPartituras.getUrlPartitura_Angular(
       RutaArchivo
     );
-    window.open(url);
+    window.open(url,"_blank");
+  }
+
+  async comprobarPartituras(clavePartitura:number){
+
+    // await this.servicioPartituras.getPartitura(this.TipoInstrumento,this.TipoPaper,this.IdTipoPartitura,clavePartitura).then((doc_aux1) => {
+    //   console.log(doc_aux1[0]);
+
+    //   var partitura_aux = new DocPartitura;
+    //   partitura_aux = doc_aux1[0];
+
+    //   console.log(partitura_aux.RutaArchivo);
+
+    // });
+
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 300000);
+
   }
 
   async EliminarPartitura(ClavePartitura:number){

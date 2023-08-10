@@ -60,10 +60,12 @@ export class PartiturasService {
     querySnapshot.forEach(async (doc) => {
       let doc_aux = new PartituraModel()
       doc_aux = doc.data() as PartituraModel
-
+      //console.log(doc.data())
       let DocGrid = new DocsPartitura();
       DocGrid.Clave = doc_aux.Clave;
       DocGrid.Nombre = doc_aux.Nombre;
+      DocGrid.ClaveInstrumento = TipoInstrumento;
+      DocGrid.ClaveTipoPaper = TipoPaper;
 
 
       //console.log(doc_aux);
@@ -118,7 +120,19 @@ export class PartiturasService {
   async setPartitura_Angular(docPartitura:DocPartitura, formPartitura:formPartituraModel){
     //var docRef = collection(this.firestore,'prueba');
 
-    await setDoc(doc(this.firestore,`TipoPartituras/${formPartitura.ClaveTipo}/Pasodobles/${formPartitura.ClavePartitura}/Documentos`,docPartitura.Id),{
+    var ClaveTipoPartitura = "";
+
+    const ClaveTipoPartituraRef = collection(this.firestore, '/TipoPartituras');
+    const q2 = query(ClaveTipoPartituraRef, where("IdTipoPartitura","==",formPartitura.ClaveTipo));
+    const querySnapshot2 = await getDocs(q2);
+      querySnapshot2.forEach(async (doc2) => {
+        //console.log(doc1);
+
+        ClaveTipoPartitura = doc2.data().ClaveTipoPartitura;
+        //console.log(doc2.data().ClaveTipoPartitura);
+      });
+
+    await setDoc(doc(this.firestore,`TipoPartituras/${formPartitura.ClaveTipo}/${ClaveTipoPartitura}/${formPartitura.ClavePartitura}/Documentos`,docPartitura.Id),{
       ClaveInstrumento:docPartitura.ClaveInstrumento,
       ClaveTipoPaper: docPartitura.ClaveTipoPaper,
       IdUsuario: docPartitura.IdUsuario,
@@ -214,6 +228,29 @@ export class PartiturasService {
     });
 
     });
+  }
+
+  async getPartitura(ClaveInstrument:number, ClavePaper:number, IdTipoPartitura:number,ClaveDoc:number):Promise<Observable<DocPartitura[]>>{
+    let docs = new Array<DocPartitura>();
+    var ClaveTipoPartitura = "";
+
+    const ClaveTipoPartituraRef = collection(this.firestore, '/TipoPartituras');
+    const q2 = query(ClaveTipoPartituraRef, where("IdTipoPartitura","==",IdTipoPartitura));
+    const querySnapshot2 = await getDocs(q2);
+      querySnapshot2.forEach(async (doc2) => {
+        ClaveTipoPartitura = doc2.data().ClaveTipoPartitura;
+      });
+
+    const PartituraByInstrRef = collection(this.firestore,`/TipoPartituras/${IdTipoPartitura}/${ClaveTipoPartitura}/${ClaveDoc}/Documentos`);
+    const q1 = query(PartituraByInstrRef, where("ClaveInstrumento", "==", ClaveInstrument), where("ClaveTipoPaper", "==", ClavePaper));
+    const querySnapshot1 = await getDocs(q1);
+    querySnapshot1.forEach((doc) => {
+      let doc_aux = new DocPartitura()
+      doc_aux = doc.data() as DocPartitura
+      docs.push(doc_aux)
+    });
+
+      return docs as unknown as Observable<DocPartitura[]>;
   }
 
 }

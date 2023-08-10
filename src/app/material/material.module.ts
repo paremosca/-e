@@ -14,6 +14,7 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatNavList} from '@angular/material/list';
 import {MatListModule} from '@angular/material/list';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 const materialModules = [
   MatIconModule,
@@ -30,7 +31,8 @@ const materialModules = [
   MatIconModule,
   MatDividerModule,
   MatListModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatProgressSpinnerModule
 ];
 
 
