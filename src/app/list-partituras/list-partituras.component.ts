@@ -88,7 +88,12 @@ export class ListPartiturasComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.loadPartitures();
+
+    if(!changes['IdTipoPartitura'].isFirstChange()) {
+      //do something
+      this.loadPartitures();
+    }
+
   }
 
   changeTipoInstrumento() {
@@ -135,6 +140,24 @@ export class ListPartiturasComponent implements OnInit {
             const fileBlob = fetch(url_aux).then((response) => response.blob());
             jszip.file(doc1.Nombre + '.pdf', fileBlob);
           });
+      }else if (doc1.ClaveInstrumento = 16){
+        await this.servicioPartituras.getPartitura(10,1,this.IdTipoPartitura,doc1.Clave).then(async (doc_aux1) => {
+          var partitura_aux = new DocPartitura;
+          partitura_aux = doc_aux1[0];
+
+          if (partitura_aux != undefined){
+            await this.servicioPartituras
+            .getUrlPartitura_Angular(partitura_aux.RutaArchivo)
+            .then((url_aux) => {
+              const fileBlob = fetch(url_aux).then((response) => response.blob());
+              jszip.file(doc1.Nombre + '.pdf', fileBlob);
+              todook = true;
+            });
+
+          }
+
+
+        });
       }else if(doc1?.ClaveInstrumento && doc1?.ClaveTipoPaper){
 
         for (let i = doc1?.ClaveTipoPaper - 1; i >= 1; i--) {

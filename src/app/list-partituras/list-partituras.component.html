@@ -11,7 +11,7 @@
       <div class="col-12 col-lg-3 mt-lg-0 mt-3">
         <mat-form-field>
           <mat-label>Instrument</mat-label>
-          <mat-select name="ClaveInstrumento" [(ngModel)]="TipoInstrumento" (selectionChange)="changeTipoInstrumento()" [disabled]="!EsArxiver && !EsAdmin">
+          <mat-select name="ClaveInstrumento" [(ngModel)]="TipoInstrumento" (selectionChange)="changeTipoInstrumento()" [disabled]="!EsAdmin">
             <mat-option *ngFor="let instrument of TipoInstrumentos" [value]="instrument.Clave">
               {{instrument.Instrumento}}
             </mat-option>
@@ -40,12 +40,16 @@
     </div>
     <div *ngIf="isLoading">
       <!-- Add your loading spinner component or HTML markup here -->
-      <div class="spinner__loading">
-        <span>mas sabe perro sanxe por perro que por sanche</span>
+      <div class="spinner__loading my-3 mb-4" style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  ">
+        <span>Esperat uns segons</span>
         <div>
           <mat-progress-spinner
             diameter="60"
-            mode="indeterminate">
+            mode="indeterminate" class="mt-3">
             </mat-progress-spinner>
         </div>
       </div>

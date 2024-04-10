@@ -100,14 +100,12 @@ export class RegisterComponent implements OnInit {
           icon: 'success',
           title: 'Ja t\'has registrat!!',
           html: 'T\'has registrat correctament, especial.',
-          timer: 40000,
+          timer: 4000,
           timerProgressBar: true,
           didOpen: () => {
             Swal.showLoading()
-
           }
         }).then((result) => {
-          /* Read more about handling dismissals below */
           if (result.dismiss === Swal.DismissReason.timer) {
             this.router.navigate(['/partitures']);
           }
@@ -131,7 +129,7 @@ export class RegisterComponent implements OnInit {
           icon:'error',
           titleText: "Error creant Usuari",
           text: MensajeError,
-          confirmButtonText: 'Okei :('
+          confirmButtonText: 'Ok'
         });
       });
   }

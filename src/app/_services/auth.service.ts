@@ -162,7 +162,7 @@ export class AuthService {
       ClaveInstrument: Usuario.ClaveInstrument,
       ClavePaper: Usuario.ClavePaper,
       EsAdmin:false,
-      EsArxiver:true,
+      EsArxiver:false,
       uid:Usuario.uid
     }).then(async resp=>{
       // await updateDoc(doc(this.firestore,"usuarios",resp.id),{
