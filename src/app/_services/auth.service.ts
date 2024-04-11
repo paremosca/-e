@@ -135,7 +135,7 @@ export class AuthService {
       querySnapshot2.forEach(async (doc2) => {
         let prueba = doc2.data() as UsuarioModel;
         if (prueba.Nombre){
-          Nombre = prueba.Nombre;
+          Nombre = prueba.Nombre + " " + prueba.apellidos;
         }
       });
       return Nombre;

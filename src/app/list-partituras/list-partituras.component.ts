@@ -254,7 +254,7 @@ export class ListPartiturasComponent implements OnInit {
     this.servicioPartituras.borrarPartitura(this.IdTipoPartitura,this.TipoInstrumento,this.TipoPaper,ClaveTipoPartitura_aux,ClavePartitura).then(resp => {
       Swal.fire({
         title: 'Vols esborrar la partitura?',
-        text: "Cuido, si l'esborres ja no es podrà recuperar...",
+        text: "Si l'esborres ja no la podràs recuperar",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#2caa1b',

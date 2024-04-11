@@ -68,16 +68,16 @@ export class LoginComponent implements OnInit {
       this.authService.isLoggedIn = observableOf(false)
       let authError = error as FirebaseError;
         let errorCode = authError.code;
-        let MensajeError = "Error no tratat"
+        let MensajeError = "Error no contemplat"
 
         Swal.close();
 
         if (errorCode == "auth/user-not-found") {
           MensajeError = "Este email no te un compter creat, <br>si en vols un parlali a Izan";
         }else if(errorCode == "auth/wrong-password"){
-          MensajeError = "Contrasenya incorrecta";
+          MensajeError = "Contrasenya incorrecta <br> Que eres, de la Tropi?";
         }else{
-          MensajeError = "Error no tratat, parlali a Izan i dis-li: <br><b>" + errorCode+"</b>";
+          MensajeError = "Error no contemplat, parlali a Izan i dis-li: <br><b>" + errorCode+"</b>";
         }
 
         Swal.fire({
