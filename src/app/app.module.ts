@@ -28,6 +28,7 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { ListPartiturasComponent } from './list-partituras/list-partituras.component';
+import { PoliticaComponent } from './politica/politica.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ListPartiturasComponent } from './list-partituras/list-partituras.compo
     LoginComponent,
     RegisterComponent,
     ResetEmailComponent,
-    ListPartiturasComponent
+    ListPartiturasComponent,
+    PoliticaComponent
   ],
   imports: [
     BrowserModule,

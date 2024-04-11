@@ -127,6 +127,20 @@ export class AuthService {
       return ClavePaper;
   }
 
+  async getNombre(uid:string):Promise<string>{
+    let Nombre: string = "";
+    const ClaveTipoPartituraRef = collection(this.firestore, '/usuarios');
+    const q2 = query(ClaveTipoPartituraRef, where("uid","==",uid));
+    const querySnapshot2 = await getDocs(q2);
+      querySnapshot2.forEach(async (doc2) => {
+        let prueba = doc2.data() as UsuarioModel;
+        if (prueba.Nombre){
+          Nombre = prueba.Nombre;
+        }
+      });
+      return Nombre;
+  }
+
   login_Angular(Usuario:UsuarioModel){
     return signInWithEmailAndPassword(this.auth, Usuario.email, Usuario.password)
   }
@@ -156,7 +170,7 @@ export class AuthService {
   async setUsuario_Angular(Usuario:UsuarioModel){
     const dbRef = collection(this.firestore, "usuarios");
     const docref1 = await addDoc(dbRef,{
-      Nombre: Usuario.nom,
+      Nombre: Usuario.Nombre,
       Apellidos: Usuario.apellidos,
       Email: Usuario.email,
       ClaveInstrument: Usuario.ClaveInstrument,

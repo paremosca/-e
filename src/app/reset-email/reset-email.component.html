@@ -2,19 +2,19 @@
   <div class="callout callout-info">
     <b>Informació</b>
     <br>
-    Fica el correu personal i podràs canviar la contrasenya
+    Introduïx el teu correu i podràs modificar la contrasenya
   </div>
   <form (ngSubmit)="onSubmit(f)" #f="ngForm" class="mt-5">
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
       <input type="email" name="email" matInput [(ngModel)]="Usuario.email" required email />
       <mat-error *ngIf="f.submitted && f.controls['email'].errors != null && f.controls['email'].errors.required">
-        El camp Email es obligatori</mat-error>
+        El camp Email és obligatori</mat-error>
         <mat-error *ngIf="f.submitted && f.controls['email'].errors != null && f.controls['email'].errors.email">
-          Fica'm un Email vàlid, va</mat-error>
+          Posa'm un Email vàlid, va</mat-error>
     </mat-form-field>
   </form>
   <div style="text-align: right;">
-    <button type="button" mat-button color="primary" (click)="prueba()">Tornar al login</button>
+    <button type="button" mat-button color="primary" (click)="prueba()">Tornar al Login</button>
   </div>
 </div>

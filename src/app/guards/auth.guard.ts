@@ -31,6 +31,8 @@ export class AuthGuard implements CanActivate {
         return !this.loggedIn;
       }else if(route.routeConfig.path.includes("register") || route.routeConfig.path.includes("reset-email")){
         return !this.loggedIn;
+      }else if(route.routeConfig.path.includes("politica")){
+        return !this.loggedIn;
       }
       else{
         this.router.navigate(['/login'],{ state: { NoSession: 'True' } });

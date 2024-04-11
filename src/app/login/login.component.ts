@@ -33,28 +33,35 @@ export class LoginComponent implements OnInit {
     Swal.fire({
       allowOutsideClick:false,
       icon:'info',
-      text: "Espera perfa..."
+      text: "Espere perfa..."
     });
     Swal.showLoading();
 
     this.authService.login_Angular(this.Usuario)
     .then(resp => {
-      Swal.close();
-      Swal.fire({
-        icon: 'success',
-        title: 'Perfecte',
-        html: 'Hola Usuari de la SIM',
-        timer: 2000,
-        timerProgressBar: true,
-        didOpen: () => {
-          Swal.showLoading()
-        }
-      }).then((result) => {
-        if (result.dismiss === Swal.DismissReason.timer) {
-          this.authService.isLoggedIn = observableOf(true)
-          this.reloadPage();
-        }
+
+      this.authService.getNombre(resp.user.uid).then(resp1=>{
+        let Nombre: String = "";
+        console.log(resp1);
+        Nombre = resp1;
+        Swal.close();
+        Swal.fire({
+          icon: 'success',
+          title: 'Perfecte',
+          html: "Hola " + resp1,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading()
+          }
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            this.authService.isLoggedIn = observableOf(true)
+            this.reloadPage();
+          }
+        })
       })
+
 
     })
     .catch(error => {
@@ -77,7 +84,7 @@ export class LoginComponent implements OnInit {
           icon:'error',
           titleText: "Error Iniciant Sessió",
           html: MensajeError,
-          confirmButtonText: 'Okei :('
+          confirmButtonText: 'Ok'
         });
     })
   }

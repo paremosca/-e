@@ -10,14 +10,16 @@ import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angula
 import { AuthGuard } from './guards/auth.guard';
 import { MenuComponent } from './menu/menu.component';
 import { ResetEmailComponent } from './reset-email/reset-email.component';
+import { PoliticaComponent } from './politica/politica.component';
 
 const routes: Routes = [
-  {path: '', pathMatch: 'full', component:InicioComponent, canActivate: [AuthGuard]},
-  {path: 'inicio', component:InicioComponent, canActivate: [AuthGuard]},
+  { path: '', pathMatch: 'full', component:InicioComponent, canActivate: [AuthGuard]},
+  { path: 'inicio', component:InicioComponent, canActivate: [AuthGuard]},
   { path: 'partitures', component: PartituresComponent, canActivate: [AuthGuard] },
   { path:'AddPartitures', component:AddPartituraComponent, canActivate: [AuthGuard]},
   { path:'login', component: LoginComponent, canActivate: [AuthGuard]},
   { path:'register', component: RegisterComponent, canActivate: [AuthGuard]},
+  { path:'politica', component: PoliticaComponent, canActivate: [AuthGuard]},
   { path:'reset-email', component:ResetEmailComponent, canActivate: [AuthGuard]},
   { path:'menu', component: MenuComponent, canActivate: [AuthGuard]},
   {path:'**', redirectTo:'inicio', pathMatch:'full'}

@@ -2,7 +2,7 @@
 export class UsuarioModel{
     email: string;
     password: string;
-    nom: string;
+    Nombre: string;
     apellidos: string;
     ClaveInstrument: number;
     ClavePaper: number;
