@@ -3,7 +3,7 @@ export class UsuarioModel{
     email: string;
     password: string;
     Nombre: string;
-    apellidos: string;
+    Apellidos: string;
     ClaveInstrument: number;
     ClavePaper: number;
     EsAdmin: boolean;

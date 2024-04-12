@@ -135,7 +135,7 @@ export class AuthService {
       querySnapshot2.forEach(async (doc2) => {
         let prueba = doc2.data() as UsuarioModel;
         if (prueba.Nombre){
-          Nombre = prueba.Nombre + " " + prueba.apellidos;
+          Nombre = prueba.Nombre + " " + prueba.Apellidos;
         }
       });
       return Nombre;
@@ -171,7 +171,7 @@ export class AuthService {
     const dbRef = collection(this.firestore, "usuarios");
     const docref1 = await addDoc(dbRef,{
       Nombre: Usuario.Nombre,
-      Apellidos: Usuario.apellidos,
+      Apellidos: Usuario.Apellidos,
       Email: Usuario.email,
       ClaveInstrument: Usuario.ClaveInstrument,
       ClavePaper: Usuario.ClavePaper,
@@ -189,6 +189,58 @@ export class AuthService {
 
     return docref1;
 
+}
+
+async UpsertEstadistica(id:string, log:Array<Object>){
+  const dbRef = collection(this.firestore, "Estadistics");
+
+  try {
+    // Crear un nuevo documento con el ID personalizado
+    // const docRef = await addDoc(dbRef, {
+    //   id: id,
+    //   partituras: 0,
+    //   log: log
+    // });
+
+
+
+
+    const docRef = doc(this.firestore, "Estadistics", id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      const data = docSnap.data();
+
+      const nuevoValorPartituras = (data.partituras || 0) + 1;
+
+      const nuevoLog = [...(data.log || []), log[0]];
+
+      await setDoc(doc(this.firestore,`Estadistics`,id),{
+        partituras: nuevoValorPartituras,
+        log: nuevoLog
+      }).then(async resp=>{
+        console.log("Documento agregado con éxito.");
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    } else {
+      await setDoc(doc(this.firestore,`Estadistics`,id),{
+        partituras: 1,
+        log: log
+      }).then(async resp=>{
+        console.log("Documento agregado con éxito.");
+      }).catch(err=>{
+        console.log(err)
+      })
+    }
+
+
+
+  } catch (error) {
+    console.error("Error al agregar el documento:", error);
+  }
 }
 
 

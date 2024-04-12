@@ -216,11 +216,39 @@ export class ListPartiturasComponent implements OnInit {
     }
   }
 
-  async VerPartitura(RutaArchivo: string) {
+  async VerPartitura(RutaArchivo: string, Nombre: string) {
+
+    this.PruebaInsert(Nombre)
+
     var url = await this.servicioPartituras.getUrlPartitura_Angular(
       RutaArchivo
     );
     window.open(url,"_blank");
+  }
+
+  PruebaInsert(_Nombre:string){
+
+    const fechaActual: Date = new Date();
+    const fechaComoString: string = fechaActual.toString();
+
+    const log = [
+      { fecha: fechaComoString, nombre: _Nombre }
+    ];
+
+    const logConFechasDate = log.map(item => ({
+      fecha: new Date(item.fecha),
+      nombre: item.nombre
+    }));
+
+    let Nombre: string = "Fallo";
+    this.authService.getNombre(this.authService.getUID()).then(resp1=>{
+      Nombre = resp1;
+      this.authService.UpsertEstadistica(Nombre,logConFechasDate)
+      .then(resp => {
+
+      })
+    })
+
   }
 
   async comprobarPartituras(clavePartitura:number){
@@ -251,7 +279,7 @@ export class ListPartiturasComponent implements OnInit {
         ).ClaveTipoPartitura;
 
 
-    this.servicioPartituras.borrarPartitura(this.IdTipoPartitura,this.TipoInstrumento,this.TipoPaper,ClaveTipoPartitura_aux,ClavePartitura).then(resp => {
+
       Swal.fire({
         title: 'Vols esborrar la partitura?',
         text: "Si l'esborres ja no la podràs recuperar",
@@ -263,12 +291,15 @@ export class ListPartiturasComponent implements OnInit {
         cancelButtonText: "No, es broma"
       }).then((result) => {
         if (result.isConfirmed) {
+          Swal.close();
           Swal.fire(
             'Perfecte!!',
             'Has borrat correctament la Partitura!!',
             'success'
           ).then(()=>{
-            this.loadPartitures()
+            this.servicioPartituras.borrarPartitura(this.IdTipoPartitura,this.TipoInstrumento,this.TipoPaper,ClaveTipoPartitura_aux,ClavePartitura).then(resp => {
+              this.loadPartitures()
+            })
           })
         }else if (result.dismiss === Swal.DismissReason.cancel){
           Swal.fire(
@@ -277,7 +308,7 @@ export class ListPartiturasComponent implements OnInit {
             'warning'
           )
         }
-      })
+
 
 
 
@@ -302,6 +333,6 @@ export class ListPartiturasComponent implements OnInit {
         });
     })
 
-    Swal.close();
+
   }
 }
